@@ -59,6 +59,13 @@
 
             <!-- Actions Right -->
             <div class="hidden md:flex items-center space-x-5">
+                <!-- Desktop Cart Button -->
+                <button onclick="toggleCartSidebar()" class="relative border border-burgundy/25 text-burgundy hover:border-gold hover:text-gold px-3.5 py-2 text-xs uppercase tracking-wider font-semibold rounded-sm transition-all flex items-center gap-2 shadow-xs cursor-pointer" title="View Dining Cart">
+                    <i class="fa-solid fa-cart-shopping text-gold text-sm"></i>
+                    <span>Cart</span>
+                    <span id="cart-count-header" class="bg-gold text-neutral-950 font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+                </button>
+
                 <a href="{{ url_for('reservations') }}" class="border border-burgundy text-burgundy hover:bg-burgundy hover:text-white px-4 py-2.5 text-xs uppercase tracking-widest font-medium rounded-sm transition-all flex items-center gap-2 shadow-xs">
                     <i class="fa-regular fa-calendar-days text-gold"></i> Book Table
                 </a>
@@ -95,10 +102,16 @@
                 {% endif %}
             </div>
 
-            <!-- Mobile Hamburger Button -->
-            <button id="mobile-menu-button" aria-label="Toggle Navigation" class="md:hidden text-burgundy focus:outline-none p-2">
-                <i class="fa-solid fa-bars text-xl"></i>
-            </button>
+            <!-- Mobile Header Actions -->
+            <div class="flex items-center md:hidden gap-1">
+                <button onclick="toggleCartSidebar()" class="relative text-burgundy p-2 cursor-pointer" title="View Dining Cart">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span id="cart-count-mobile" class="absolute top-0 right-0 bg-gold text-neutral-950 font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+                </button>
+                <button id="mobile-menu-button" aria-label="Toggle Navigation" class="text-burgundy focus:outline-none p-2">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
         </div>
 
         <!-- Mobile Menu Drawer -->
@@ -209,6 +222,49 @@
             </div>
         </div>
     </footer>
+
+    <!-- Floating Cart Floating Action Button -->
+    <button onclick="toggleCartSidebar()" class="fixed bottom-6 right-6 z-40 bg-burgundy hover:bg-burgundyHover text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-105 border-2 border-gold cursor-pointer" title="View Order">
+        <i class="fa-solid fa-cart-shopping text-base"></i>
+        <span id="cart-badge" class="absolute -top-1 -right-1 bg-gold text-neutral-950 font-bold text-[11px] w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+    </button>
+
+    <!-- Slide-Out Cart Sidebar Drawer -->
+    <div id="cart-sidebar-overlay" onclick="toggleCartSidebar(false)" class="fixed inset-0 bg-black/50 z-50 hidden backdrop-blur-xs transition-opacity"></div>
+    <div id="cart-sidebar" class="fixed top-0 right-0 w-full sm:w-[420px] h-full bg-cream z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col justify-between">
+        <div>
+            <div class="p-5 bg-burgundy text-white flex items-center justify-between border-b border-gold/30">
+                <div>
+                    <span class="text-gold uppercase tracking-[0.2em] text-[10px] font-semibold">Your Table Order</span>
+                    <h2 class="font-serif text-lg font-bold">Curated Dining Cart</h2>
+                </div>
+                <button onclick="toggleCartSidebar(false)" class="text-neutral-300 hover:text-white text-xl p-1.5 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div id="cart-items-container" class="p-5 space-y-3 overflow-y-auto max-h-[calc(100vh-270px)]">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </div>
+
+        <!-- Cart Footer & Checkout -->
+        <div class="p-6 bg-white border-t border-amber-900/10 space-y-3">
+            <div class="flex justify-between text-xs text-neutral-600">
+                <span>Subtotal</span>
+                <span id="cart-subtotal" class="font-medium">$0.00</span>
+            </div>
+            <div class="flex justify-between text-xs text-neutral-600">
+                <span>Hospitality & Service</span>
+                <span id="cart-service" class="font-medium">$0.00</span>
+            </div>
+            <div class="flex justify-between font-serif text-lg font-bold text-burgundy pt-2 border-t border-neutral-100">
+                <span>Total Amount</span>
+                <span id="cart-total" class="text-gold">$0.00</span>
+            </div>
+            <button onclick="checkoutCart()" class="w-full bg-burgundy hover:bg-burgundyHover text-white py-3.5 text-xs uppercase tracking-widest font-semibold rounded-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-champagne-glasses text-gold"></i> Send Order to Kitchen
+            </button>
+        </div>
+    </div>
 
     <!-- Main JavaScript script link -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>

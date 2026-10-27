@@ -62,11 +62,29 @@ function initCarousel() {
 }
 
 // Global Cart Functionality
-let cart = JSON.parse(localStorage.getItem('lumiere_cart')) || [];
+let cart = [];
+try {
+    cart = JSON.parse(localStorage.getItem('lumiere_cart')) || [];
+} catch (e) {
+    cart = [];
+}
 
 function saveCart() {
-    localStorage.setItem('lumiere_cart', JSON.stringify(cart));
+    try {
+        localStorage.setItem('lumiere_cart', JSON.stringify(cart));
+    } catch (e) {
+        console.warn('LocalStorage unavailable:', e);
+    }
     updateCartUI();
+}
+
+function handleAddToCart(btn) {
+    if (!btn) return;
+    const id = btn.getAttribute('data-id') || '';
+    const name = btn.getAttribute('data-name') || 'Dish';
+    const price = parseFloat(btn.getAttribute('data-price')) || 0;
+    const image = btn.getAttribute('data-image') || '';
+    addToCart(id, name, price, image);
 }
 
 function addToCart(id, name, price, image) {
@@ -75,7 +93,7 @@ function addToCart(id, name, price, image) {
     if (existing) {
         existing.quantity += 1;
     } else {
-        cart.push({ id: itemId, name: name, price: parseFloat(price), image: image, quantity: 1 });
+        cart.push({ id: itemId, name: name, price: parseFloat(price) || 0, image: image, quantity: 1 });
     }
     saveCart();
     toggleCartSidebar(true);
@@ -123,6 +141,7 @@ function updateCartUI() {
     const container = document.getElementById('cart-items-container');
     const badge = document.getElementById('cart-badge');
     const headerCount = document.getElementById('cart-count-header');
+    const mobileCount = document.getElementById('cart-count-mobile');
     const subtotalEl = document.getElementById('cart-subtotal');
     const serviceEl = document.getElementById('cart-service');
     const totalEl = document.getElementById('cart-total');
@@ -133,6 +152,7 @@ function updateCartUI() {
         badge.style.display = totalItems > 0 ? 'flex' : 'none';
     }
     if (headerCount) headerCount.innerText = totalItems;
+    if (mobileCount) mobileCount.innerText = totalItems;
 
     if (!container) return;
 
