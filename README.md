@@ -75,8 +75,8 @@ Open your browser to:
 
 ## 🔑 Default Administrator Credentials
 
-- **Email**: `admin@lumiere.com`
-- **Password**: `Admin@Lumiere2025`
+- **Email**: `centralpoppy@gmail.com`
+- **Password**: `Amadipromise`
 - **Admin Dashboard**: `http://127.0.0.1:5000/admin`
 
 ---

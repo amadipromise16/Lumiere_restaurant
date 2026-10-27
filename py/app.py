@@ -142,10 +142,18 @@ def load_user(user_id):
 
 # --- Database Initialization & Seeding ---
 def seed_data():
-    admin_email = os.getenv('ADMIN_EMAIL', 'admin@lumiere.com')
-    admin_pass = os.getenv('ADMIN_PASSWORD', 'Admin@Lumiere2025')
+    admin_email = os.getenv('ADMIN_EMAIL', 'centralpoppy@gmail.com')
+    admin_pass = os.getenv('ADMIN_PASSWORD', 'Amadipromise')
 
-    if not User.query.filter_by(email=admin_email).first():
+    admin = User.query.filter_by(email=admin_email).first()
+    if not admin:
+        admin = User.query.filter_by(is_admin=True).first()
+
+    if admin:
+        admin.email = admin_email
+        admin.password_hash = generate_password_hash(admin_pass)
+        admin.is_admin = True
+    else:
         admin = User(
             name='Executive Administrator',
             email=admin_email,
@@ -153,6 +161,7 @@ def seed_data():
             is_admin=True
         )
         db.session.add(admin)
+    db.session.commit()
 
     if MenuItem.query.count() == 0:
         initial_menu = [
