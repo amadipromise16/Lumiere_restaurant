@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Lumière Fine Dining | Modern Elegance & Timeless Flavor{% endblock %}
+{% block content %}
+<!-- Hero Section -->
+<section class="relative bg-neutral-950 text-white py-28 md:py-40 overflow-hidden">
+    <div class="absolute inset-0 opacity-45 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1920&q=80');"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-neutral-950/70"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-burgundy/80 border border-gold/40 backdrop-blur-xs">
+            <i class="fa-solid fa-sparkles text-gold text-xs"></i>
+            <span class="text-gold uppercase tracking-[0.3em] text-[10px] font-semibold">Welcome to Lumière Sanctuary</span>
+        </div>
+        <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight max-w-4xl mx-auto leading-tight">Modern Elegance.<br><span class="text-gold italic font-normal">Timeless Flavor.</span></h1>
+        <p class="text-neutral-300 max-w-xl mx-auto text-sm sm:text-base font-light leading-relaxed">An elevated dining experience where exceptional cuisine meets impeccable service in an atmosphere of refined warmth.</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4 pt-6">
+            <a href="{{ url_for('reservations') }}" class="bg-burgundy hover:bg-burgundyHover text-white px-8 py-3.5 text-xs uppercase tracking-widest font-semibold rounded-sm transition-all shadow-xl flex items-center justify-center gap-2 border border-gold/30 hover:scale-105">
+                <i class="fa-regular fa-calendar-check text-gold"></i> Reserve a Table
+            </a>
+            <a href="{{ url_for('menu') }}" class="border border-white/80 hover:bg-white hover:text-neutral-900 text-white px-8 py-3.5 text-xs uppercase tracking-widest font-semibold rounded-sm transition-all flex items-center justify-center gap-2 hover:scale-105">
+                <i class="fa-solid fa-utensils"></i> Explore Menu
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- 3 Pillared Highlights -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-14 relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white p-8 rounded-sm shadow-xl border border-amber-900/10 text-center space-y-3 hover-lift">
+        <div class="w-12 h-12 mx-auto rounded-full bg-cream border border-amber-200 flex items-center justify-center text-gold text-xl">
+            <i class="fa-solid fa-seedling"></i>
+        </div>
+        <h3 class="font-serif text-lg font-bold text-burgundy">Artisanal Ingredients</h3>
+        <p class="text-xs text-neutral-600 leading-relaxed font-light">Thoughtfully sourced from organic regional growers and heritage European producers.</p>
+    </div>
+    <div class="bg-white p-8 rounded-sm shadow-xl border border-amber-900/10 text-center space-y-3 hover-lift">
+        <div class="w-12 h-12 mx-auto rounded-full bg-cream border border-amber-200 flex items-center justify-center text-gold text-xl">
+            <i class="fa-solid fa-fire-burner"></i>
+        </div>
+        <h3 class="font-serif text-lg font-bold text-burgundy">Executive Gastronomy</h3>
+        <p class="text-xs text-neutral-600 leading-relaxed font-light">Crafting modern culinary poetry using time-honored French and continental techniques.</p>
+    </div>
+    <div class="bg-white p-8 rounded-sm shadow-xl border border-amber-900/10 text-center space-y-3 hover-lift">
+        <div class="w-12 h-12 mx-auto rounded-full bg-cream border border-amber-200 flex items-center justify-center text-gold text-xl">
+            <i class="fa-solid fa-wine-bottle"></i>
+        </div>
+        <h3 class="font-serif text-lg font-bold text-burgundy">Curated Cellar</h3>
+        <p class="text-xs text-neutral-600 leading-relaxed font-light">Over 200 rare vintages, champagnes, and artisanal reserve wines hand-selected by our sommelier.</p>
+    </div>
+</section>
+
+<!-- Narrative Section -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+    <div class="space-y-6">
+        <span class="text-gold uppercase tracking-[0.25em] text-xs font-semibold">Our Culmination</span>
+        <h2 class="font-serif text-3xl sm:text-5xl font-bold text-burgundy leading-tight">Where Culinary Mastery Meets Impeccable Hospitality</h2>
+        <p class="text-neutral-600 text-sm sm:text-base font-light leading-relaxed">At Lumière, we hold that dining transcends the plate—it is an indelible sensory memory. Every plate is orchestrated with intention, from the hand-whipped sauces to the golden ambient glow of our dining room.</p>
+        <div class="pt-2 flex items-center gap-6">
+            <a href="{{ url_for('about') }}" class="inline-flex items-center gap-2 text-burgundy font-bold text-xs uppercase tracking-widest hover:text-gold transition-colors">
+                Discover Our Heritage <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+            <a href="{{ url_for('gallery') }}" class="inline-flex items-center gap-2 text-neutral-600 font-semibold text-xs uppercase tracking-widest hover:text-burgundy transition-colors">
+                View Dining Gallery <i class="fa-solid fa-images text-[10px]"></i>
+            </a>
+        </div>
+    </div>
+    <div class="relative">
+        <div class="absolute -inset-4 bg-gradient-to-tr from-burgundy/20 to-gold/20 rounded-sm transform rotate-1 filter blur-sm"></div>
+        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=80" alt="Lumière Dining Room" class="relative rounded-sm shadow-2xl w-full h-[440px] object-cover">
+    </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="bg-burgundy text-white py-16 px-4">
+    <div class="max-w-5xl mx-auto text-center space-y-6">
+        <span class="text-gold uppercase tracking-[0.3em] text-xs font-semibold">An Unforgettable Evening Awaits</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold">Reserve Your Private Table</h2>
+        <p class="text-xs text-neutral-300 max-w-lg mx-auto font-light leading-relaxed">Whether celebrating an intimate milestone, hosting a business dinner, or seeking exceptional gastronomy, our hosts await you.</p>
+        <div class="pt-2">
+            <a href="{{ url_for('reservations') }}" class="inline-flex items-center gap-2 bg-gold hover:bg-goldLight text-neutral-950 font-bold px-8 py-3.5 text-xs uppercase tracking-widest rounded-sm shadow-xl transition-all hover:scale-105">
+                <i class="fa-regular fa-calendar-days"></i> Book Table Online
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

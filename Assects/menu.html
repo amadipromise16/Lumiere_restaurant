@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Curated Culinary Menu – Lumière Restaurant{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Menu Header -->
+    <div class="text-center mb-10">
+        <span class="text-gold uppercase tracking-[0.3em] text-xs font-semibold">Elevated Flavors & Seasonal Vision</span>
+        <h1 class="font-serif text-4xl sm:text-5xl font-bold text-burgundy mt-2">The Dining Menu</h1>
+        <p class="text-xs text-neutral-500 max-w-lg mx-auto mt-2 font-light">Each composition is an homage to exceptional local purveyors and classical gastronomy.</p>
+    </div>
+
+    <!-- Featured Rotating Carousel -->
+    <div class="mb-14 bg-white p-3 sm:p-4 rounded-sm shadow-xl border border-amber-900/10 max-w-4xl mx-auto carousel-container">
+        <div class="relative h-[280px] sm:h-[400px] rounded-sm overflow-hidden shadow-inner">
+            {% for photo in carousel_photos %}
+            <div class="carousel-slide absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out {% if loop.first %}opacity-100 z-10{% else %}opacity-0 z-0{% endif %}" style="background-image: url('{{ photo }}');">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6 sm:p-8">
+                    <div class="text-white max-w-lg">
+                        <span class="bg-burgundy text-gold text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-sm font-semibold border border-gold/40">Chef's Featured Creation</span>
+                        <h3 class="font-serif text-2xl sm:text-3xl font-bold mt-2">Impeccably Crafted Gastronomy</h3>
+                        <p class="text-xs text-neutral-200 mt-1 font-light hidden sm:block">Hand-selected seasonal ingredients prepared with French culinary precision.</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <div class="flex flex-wrap justify-center gap-2.5 mb-12">
+        <a href="{{ url_for('menu', category='all') }}" class="px-5 py-2.5 rounded-sm text-xs uppercase tracking-widest font-semibold transition-all {% if active_category == 'all' %}bg-burgundy text-white shadow-md border border-burgundy{% else %}bg-white text-burgundy border border-amber-900/15 hover:border-burgundy{% endif %}">All Offerings</a>
+        <a href="{{ url_for('menu', category='pasta') }}" class="px-5 py-2.5 rounded-sm text-xs uppercase tracking-widest font-semibold transition-all {% if active_category == 'pasta' %}bg-burgundy text-white shadow-md border border-burgundy{% else %}bg-white text-burgundy border border-amber-900/15 hover:border-burgundy{% endif %}">House Pastas</a>
+        <a href="{{ url_for('menu', category='mains') }}" class="px-5 py-2.5 rounded-sm text-xs uppercase tracking-widest font-semibold transition-all {% if active_category == 'mains' %}bg-burgundy text-white shadow-md border border-burgundy{% else %}bg-white text-burgundy border border-amber-900/15 hover:border-burgundy{% endif %}">Grand Mains</a>
+        <a href="{{ url_for('menu', category='salads') }}" class="px-5 py-2.5 rounded-sm text-xs uppercase tracking-widest font-semibold transition-all {% if active_category == 'salads' %}bg-burgundy text-white shadow-md border border-burgundy{% else %}bg-white text-burgundy border border-amber-900/15 hover:border-burgundy{% endif %}">Garden & Salads</a>
+        <a href="{{ url_for('menu', category='desserts') }}" class="px-5 py-2.5 rounded-sm text-xs uppercase tracking-widest font-semibold transition-all {% if active_category == 'desserts' %}bg-burgundy text-white shadow-md border border-burgundy{% else %}bg-white text-burgundy border border-amber-900/15 hover:border-burgundy{% endif %}">Desserts</a>
+        <a href="{{ url_for('menu', category='beverages') }}" class="px-5 py-2.5 rounded-sm text-xs uppercase tracking-widest font-semibold transition-all {% if active_category == 'beverages' %}bg-burgundy text-white shadow-md border border-burgundy{% else %}bg-white text-burgundy border border-amber-900/15 hover:border-burgundy{% endif %}">Wines & Cuvée</a>
+    </div>
+
+    <!-- Dishes Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
+        {% for item in items %}
+        <div class="bg-white rounded-sm shadow-md overflow-hidden border border-amber-900/10 flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+            <div class="relative h-52 overflow-hidden bg-neutral-100">
+                <img src="{{ item.image_url }}" alt="{{ item.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs text-burgundy text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-xs shadow-xs">
+                    {{ item.category }}
+                </span>
+                <button onclick="toggleCardLike(this)" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/85 backdrop-blur-xs flex items-center justify-center text-burgundy shadow-md hover:bg-burgundy hover:text-white transition-colors" title="Save Favorite">
+                    <i class="fa-regular fa-heart text-sm"></i>
+                </button>
+            </div>
+            <div class="p-5 flex flex-col flex-grow justify-between space-y-4">
+                <div>
+                    <h3 class="font-serif text-lg font-bold text-burgundy leading-snug group-hover:text-gold transition-colors">{{ item.name }}</h3>
+                    <p class="text-xs text-neutral-600 mt-1.5 leading-relaxed font-light line-clamp-3">{{ item.description }}</p>
+                </div>
+                <div class="pt-4 border-t border-neutral-100 flex items-center justify-between">
+                    <span class="font-serif text-xl font-bold text-neutral-900">${{ "%.2f"|format(item.price) }}</span>
+                    <button onclick="addToCart('{{ item.id }}', {{ item.name|tojson }}, {{ item.price }}, {{ item.image_url|tojson }})" class="bg-burgundy hover:bg-burgundyHover text-white px-3.5 py-2 text-xs uppercase tracking-widest font-semibold rounded-sm transition-all flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-plus text-[10px] text-gold"></i> Order
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Floating Cart Floating Action Button -->
+<button onclick="toggleCartSidebar()" class="fixed bottom-6 right-6 z-40 bg-burgundy hover:bg-burgundyHover text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-105 border-2 border-gold" title="View Order">
+    <i class="fa-solid fa-cart-shopping text-base"></i>
+    <span id="cart-badge" class="absolute -top-1 -right-1 bg-gold text-neutral-950 font-bold text-[11px] w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+</button>
+
+<!-- Slide-Out Cart Sidebar Drawer -->
+<div id="cart-sidebar-overlay" onclick="toggleCartSidebar(false)" class="fixed inset-0 bg-black/50 z-50 hidden backdrop-blur-xs transition-opacity"></div>
+<div id="cart-sidebar" class="fixed top-0 right-0 w-full sm:w-[420px] h-full bg-cream z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col justify-between">
+    <div>
+        <div class="p-5 bg-burgundy text-white flex items-center justify-between border-b border-gold/30">
+            <div>
+                <span class="text-gold uppercase tracking-[0.2em] text-[10px] font-semibold">Your Table Order</span>
+                <h2 class="font-serif text-lg font-bold">Curated Dining Cart</h2>
+            </div>
+            <button onclick="toggleCartSidebar(false)" class="text-neutral-300 hover:text-white text-xl p-1.5"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div id="cart-items-container" class="p-5 space-y-3 overflow-y-auto max-h-[calc(100vh-270px)]">
+            <!-- Dynamically populated by JS -->
+        </div>
+    </div>
+
+    <!-- Cart Footer & Checkout -->
+    <div class="p-6 bg-white border-t border-amber-900/10 space-y-3">
+        <div class="flex justify-between text-xs text-neutral-600">
+            <span>Subtotal</span>
+            <span id="cart-subtotal" class="font-medium">$0.00</span>
+        </div>
+        <div class="flex justify-between text-xs text-neutral-600">
+            <span>Hospitality & Service</span>
+            <span id="cart-service" class="font-medium">$0.00</span>
+        </div>
+        <div class="flex justify-between font-serif text-lg font-bold text-burgundy pt-2 border-t border-neutral-100">
+            <span>Total Amount</span>
+            <span id="cart-total" class="text-gold">$0.00</span>
+        </div>
+        <button onclick="checkoutCart()" class="w-full bg-burgundy hover:bg-burgundyHover text-white py-3.5 text-xs uppercase tracking-widest font-semibold rounded-sm shadow-md transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-champagne-glasses text-gold"></i> Send Order to Kitchen
+        </button>
+    </div>
+</div>
+{% endblock %}

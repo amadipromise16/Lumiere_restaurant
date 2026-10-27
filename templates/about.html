@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Our Heritage & Culinary Philosophy – Lumière Restaurant{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <!-- Story Hero -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">
+        <div class="relative">
+            <div class="absolute -inset-3 bg-gold/15 rounded-sm transform -rotate-1"></div>
+            <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1000&q=80" alt="Lumière Dining Room" class="relative rounded-sm shadow-2xl w-full h-[500px] object-cover">
+        </div>
+        <div class="space-y-6">
+            <span class="text-gold uppercase tracking-[0.25em] text-xs font-semibold">The Lumière Story</span>
+            <h1 class="font-serif text-4xl sm:text-5xl font-bold text-burgundy leading-tight">Crafting Timeless Memories Through Gastronomy</h1>
+            <p class="text-neutral-600 leading-relaxed font-light">Founded with the vision to create an intimate sanctuary for culinary exploration, Lumière intertwines classical French culinary philosophy with contemporary international influences.</p>
+            <p class="text-neutral-600 leading-relaxed font-light">From our daily hand-rolled pastas and carefully aged prime cuts to our seasonal pastry creations, each element is guided by a devotion to purity of flavor and warm, discrete hospitality.</p>
+            <div class="pt-4 border-t border-amber-900/10">
+                <div class="font-serif italic text-burgundy text-2xl font-semibold">Chef Élodie Martin</div>
+                <div class="text-[11px] uppercase tracking-widest text-neutral-400 mt-1 font-medium">Founder & Executive Chef</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3 Pillars of Excellence -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 py-12 border-t border-b border-amber-900/10 mb-20">
+        <div class="space-y-3">
+            <span class="text-gold font-serif text-3xl font-bold">01</span>
+            <h3 class="font-serif text-xl font-bold text-burgundy">Origin & Sourcing</h3>
+            <p class="text-xs text-neutral-600 leading-relaxed font-light">We collaborate directly with small-scale biodynamic farmers, maritime day-boat fisheries, and artisanal cheese makers.</p>
+        </div>
+        <div class="space-y-3">
+            <span class="text-gold font-serif text-3xl font-bold">02</span>
+            <h3 class="font-serif text-xl font-bold text-burgundy">The Grand Cellar</h3>
+            <p class="text-xs text-neutral-600 leading-relaxed font-light">Our temperature-controlled cellar houses rare Bordeaux vintages, organic natural wines, and limited estate champagnes.</p>
+        </div>
+        <div class="space-y-3">
+            <span class="text-gold font-serif text-3xl font-bold">03</span>
+            <h3 class="font-serif text-xl font-bold text-burgundy">Discrete Service</h3>
+            <p class="text-xs text-neutral-600 leading-relaxed font-light">Every guest is welcomed into an ambiance of quiet luxury, where every preference is remembered and discreetly honored.</p>
+        </div>
+    </div>
+
+    <!-- Chef's Quote & Reservation CTA -->
+    <div class="bg-cream border border-amber-900/15 rounded-sm p-8 sm:p-12 text-center max-w-4xl mx-auto space-y-6 shadow-sm">
+        <i class="fa-solid fa-quote-left text-gold text-3xl"></i>
+        <blockquote class="font-serif text-xl sm:text-2xl text-burgundy italic leading-relaxed">
+            "Food is our common denominator, an extraordinary universal experience that holds the power to pause time and stir the soul."
+        </blockquote>
+        <div class="pt-4">
+            <a href="{{ url_for('reservations') }}" class="bg-burgundy hover:bg-burgundyHover text-white px-8 py-3.5 text-xs uppercase tracking-widest font-semibold rounded-sm transition-all shadow-md inline-flex items-center gap-2">
+                <i class="fa-regular fa-calendar-check text-gold"></i> Experience Lumière Tonight
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

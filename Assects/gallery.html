@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Visual Atmosphere & Culinary Gallery – Lumière Restaurant{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="text-center mb-14">
+        <span class="text-gold uppercase tracking-[0.3em] text-xs font-semibold">Moments of Taste, Atmosphere & Artistry</span>
+        <h1 class="font-serif text-4xl sm:text-5xl font-bold text-burgundy mt-2">The Visual Gallery</h1>
+        <p class="text-xs text-neutral-500 max-w-md mx-auto mt-2 font-light">Glimpse the craftsmanship, the cellar selections, and the intimate ambience of our dining room.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for photo in photos %}
+        <div class="relative h-80 rounded-sm overflow-hidden shadow-lg group bg-neutral-900 border border-amber-900/10">
+            <img src="{{ photo.image_url }}" alt="{{ photo.title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out opacity-95 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                <div>
+                    <span class="text-gold uppercase tracking-widest text-[9px] font-semibold">Lumière Moments</span>
+                    <h3 class="text-white font-serif text-xl font-bold mt-0.5">{{ photo.title }}</h3>
+                </div>
+            </div>
+            <button onclick="toggleLike({{ photo.id }}, this)" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-xs flex items-center justify-center text-burgundy shadow-md hover:scale-110 hover:bg-white transition-all" title="Like Photo">
+                <i class="fa-heart {% if photo.id in liked_photo_ids %}fa-solid text-burgundy{% else %}fa-regular{% endif %} text-base"></i>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function toggleLike(photoId, btn) {
+        const icon = btn.querySelector('i');
+        fetch(`/api/toggle-like/${photoId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => {
+            if (res.redirected || res.status === 401 || res.status === 302) {
+                window.location.href = "{{ url_for('auth') }}";
+                return null;
+            }
+            return res.json();
+        })
+        .then(data => {
+            if (data && data.success) {
+                if (data.liked) {
+                    icon.classList.remove('fa-regular');
+                    icon.classList.add('fa-solid', 'text-burgundy');
+                    showToast('Saved to your favorites.');
+                } else {
+                    icon.classList.remove('fa-solid', 'text-burgundy');
+                    icon.classList.add('fa-regular');
+                    showToast('Removed from favorites.');
+                }
+            }
+        }).catch(() => {
+            window.location.href = "{{ url_for('auth') }}";
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+{% block title %}Admin Management Portal – Lumière Restaurant{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Header banner -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center pb-8 border-b border-amber-900/10 gap-4">
+        <div>
+            <div class="flex items-center gap-2">
+                <span class="bg-amber-100 text-burgundy text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm border border-amber-300">Executive Console</span>
+                <span class="text-xs text-neutral-400">&bull; Logged in as {{ current_user.name }}</span>
+            </div>
+            <h1 class="font-serif text-3xl sm:text-4xl font-bold text-burgundy mt-2">Restaurant Management Portal</h1>
+        </div>
+        <div class="flex items-center gap-3">
+            <button onclick="openAddMenuModal()" class="bg-burgundy hover:bg-burgundyHover text-white px-5 py-2.5 text-xs uppercase tracking-widest font-medium rounded-sm shadow-md transition-all flex items-center gap-2">
+                <i class="fa-solid fa-plus text-gold"></i> Add New Menu Dish
+            </button>
+            <a href="{{ url_for('menu') }}" class="border border-burgundy/40 hover:bg-burgundy hover:text-white text-burgundy px-4 py-2.5 text-xs uppercase tracking-widest font-medium rounded-sm transition-all flex items-center gap-2">
+                <i class="fa-solid fa-utensils"></i> Live Menu
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Stat Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 my-8">
+        <div class="bg-white p-6 rounded-sm shadow-sm border border-amber-900/10 flex items-center justify-between">
+            <div>
+                <p class="text-xs uppercase tracking-wider text-neutral-500 font-medium">Total Bookings</p>
+                <h3 class="font-serif text-3xl font-bold text-burgundy mt-1">{{ reservations|length }}</h3>
+                <p class="text-[11px] text-emerald-700 font-medium mt-1"><i class="fa-solid fa-check"></i> Active schedule</p>
+            </div>
+            <div class="w-12 h-12 rounded-full bg-cream border border-amber-200 flex items-center justify-center text-burgundy text-xl">
+                <i class="fa-regular fa-calendar-check text-gold"></i>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-sm shadow-sm border border-amber-900/10 flex items-center justify-between">
+            <div>
+                <p class="text-xs uppercase tracking-wider text-neutral-500 font-medium">Menu Offerings</p>
+                <h3 class="font-serif text-3xl font-bold text-burgundy mt-1">{{ menu_items|length }}</h3>
+                <p class="text-[11px] text-neutral-500 font-medium mt-1">Across 5 categories</p>
+            </div>
+            <div class="w-12 h-12 rounded-full bg-cream border border-amber-200 flex items-center justify-center text-burgundy text-xl">
+                <i class="fa-solid fa-plate-wheat text-gold"></i>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-sm shadow-sm border border-amber-900/10 flex items-center justify-between">
+            <div>
+                <p class="text-xs uppercase tracking-wider text-neutral-500 font-medium">Inquiries & Feedback</p>
+                <h3 class="font-serif text-3xl font-bold text-burgundy mt-1">{{ messages|length }}</h3>
+                <p class="text-[11px] text-neutral-500 font-medium mt-1">Customer inquiries</p>
+            </div>
+            <div class="w-12 h-12 rounded-full bg-cream border border-amber-200 flex items-center justify-center text-burgundy text-xl">
+                <i class="fa-regular fa-envelope text-gold"></i>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-sm shadow-sm border border-amber-900/10 flex items-center justify-between">
+            <div>
+                <p class="text-xs uppercase tracking-wider text-neutral-500 font-medium">Executive Admin</p>
+                <h3 class="font-serif text-xl font-bold text-burgundy mt-1 truncate">{{ current_user.email }}</h3>
+                <p class="text-[11px] text-emerald-700 font-medium mt-1"><i class="fa-solid fa-shield text-emerald-600"></i> Full Access</p>
+            </div>
+            <div class="w-12 h-12 rounded-full bg-cream border border-amber-200 flex items-center justify-center text-burgundy text-xl">
+                <i class="fa-solid fa-crown text-gold"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 1: Customer Reservations -->
+    <div class="bg-white rounded-sm shadow-md border border-amber-900/10 mb-12 overflow-hidden">
+        <div class="px-6 py-4 bg-cream border-b border-amber-900/10 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fa-regular fa-calendar-days text-gold text-lg"></i>
+                <h2 class="font-serif text-xl font-bold text-burgundy">Dining Reservations ({{ reservations|length }})</h2>
+            </div>
+        </div>
+        <div class="overflow-x-auto">
+            {% if reservations %}
+            <table class="w-full text-left text-xs text-neutral-700">
+                <thead class="bg-neutral-50 uppercase tracking-wider text-[11px] font-semibold text-neutral-500 border-b border-neutral-200">
+                    <tr>
+                        <th class="px-6 py-3.5">Guest</th>
+                        <th class="px-6 py-3.5">Date & Time</th>
+                        <th class="px-6 py-3.5">Party Size</th>
+                        <th class="px-6 py-3.5">Table Choice</th>
+                        <th class="px-6 py-3.5">Status</th>
+                        <th class="px-6 py-3.5">Booked On</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-100 font-normal">
+                    {% for res in reservations %}
+                    <tr class="hover:bg-cream/40 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="font-semibold text-burgundy text-sm">{{ res.user.name }}</div>
+                            <div class="text-[11px] text-neutral-400">{{ res.user.email }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="font-medium text-neutral-800">{{ res.date }}</span>
+                            <span class="text-gold font-semibold ml-1">@ {{ res.time }}</span>
+                        </td>
+                        <td class="px-6 py-4 font-medium">{{ res.guests }} Guests</td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 py-0.5 rounded bg-cream border border-neutral-200 text-neutral-700 text-[11px]">{{ res.table_type }}</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider {% if res.status == 'CONFIRMED' %}bg-emerald-100 text-emerald-800 border border-emerald-200{% elif res.status == 'COMPLETED' %}bg-neutral-100 text-neutral-700{% else %}bg-amber-100 text-amber-800{% endif %}">
+                                {{ res.status }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-neutral-400 text-[11px]">
+                            {{ res.created_at.strftime('%b %d, %Y %I:%M %p') if res.created_at else 'Recent' }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="py-12 text-center text-neutral-400">
+                <i class="fa-regular fa-calendar-xmark text-3xl mb-2"></i>
+                <p class="text-xs uppercase tracking-wider">No customer reservations placed yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Section 2: Menu Items Catalog -->
+    <div class="bg-white rounded-sm shadow-md border border-amber-900/10 mb-12 overflow-hidden">
+        <div class="px-6 py-4 bg-cream border-b border-amber-900/10 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-utensils text-gold text-lg"></i>
+                <h2 class="font-serif text-xl font-bold text-burgundy">Menu Catalog ({{ menu_items|length }})</h2>
+            </div>
+            <button onclick="openAddMenuModal()" class="text-xs uppercase tracking-wider text-burgundy hover:text-gold font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-plus"></i> New Dish
+            </button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-neutral-700">
+                <thead class="bg-neutral-50 uppercase tracking-wider text-[11px] font-semibold text-neutral-500 border-b border-neutral-200">
+                    <tr>
+                        <th class="px-6 py-3.5">Item</th>
+                        <th class="px-6 py-3.5">Category</th>
+                        <th class="px-6 py-3.5">Price</th>
+                        <th class="px-6 py-3.5">Description</th>
+                        <th class="px-6 py-3.5 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-100">
+                    {% for item in menu_items %}
+                    <tr class="hover:bg-cream/40 transition-colors">
+                        <td class="px-6 py-4 flex items-center gap-3">
+                            <img src="{{ item.image_url }}" alt="{{ item.name }}" class="w-12 h-12 object-cover rounded-sm border border-neutral-200 shrink-0">
+                            <span class="font-serif font-bold text-burgundy text-sm">{{ item.name }}</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-cream border border-neutral-300 text-burgundy">
+                                {{ item.category }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 font-serif text-sm font-bold text-neutral-900">
+                            ${{ "%.2f"|format(item.price) }}
+                        </td>
+                        <td class="px-6 py-4 text-neutral-600 max-w-md truncate">
+                            {{ item.description }}
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <form method="POST" action="{{ url_for('delete_menu_item', item_id=item.id) }}" onsubmit="return confirm('Are you sure you want to delete this menu item?');" class="inline">
+                                <button type="submit" class="text-neutral-400 hover:text-rose-700 p-1.5 transition-colors" title="Delete Dish">
+                                    <i class="fa-solid fa-trash-can text-sm"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Section 3: Customer Messages -->
+    <div class="bg-white rounded-sm shadow-md border border-amber-900/10 overflow-hidden">
+        <div class="px-6 py-4 bg-cream border-b border-amber-900/10 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fa-regular fa-envelope-open text-gold text-lg"></i>
+                <h2 class="font-serif text-xl font-bold text-burgundy">Customer Inquiries & Messages ({{ messages|length }})</h2>
+            </div>
+        </div>
+        <div class="p-6">
+            {% if messages %}
+            <div class="space-y-4">
+                {% for msg in messages %}
+                <div class="p-5 bg-cream/40 border border-amber-900/10 rounded-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-serif font-bold text-burgundy text-sm">{{ msg.name }}</h4>
+                            <a href="mailto:{{ msg.email }}" class="text-xs text-gold hover:underline">{{ msg.email }}</a>
+                        </div>
+                        <span class="text-[11px] text-neutral-400">{{ msg.created_at.strftime('%b %d, %Y &bull; %I:%M %p') if msg.created_at else '' }}</span>
+                    </div>
+                    <p class="text-xs text-neutral-700 leading-relaxed font-light pt-2 border-t border-neutral-100 whitespace-pre-wrap">{{ msg.message }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="py-8 text-center text-neutral-400">
+                <i class="fa-regular fa-comments text-3xl mb-2"></i>
+                <p class="text-xs uppercase tracking-wider">No customer inquiries received yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Add New Menu Item -->
+<div id="add-menu-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-xs">
+    <div class="bg-white max-w-lg w-full p-8 rounded-sm shadow-2xl relative border border-amber-900/10">
+        <button onclick="closeAddMenuModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-burgundy text-xl p-1"><i class="fa-solid fa-xmark"></i></button>
+        <div class="flex items-center gap-2 mb-2">
+            <span class="text-gold uppercase tracking-[0.2em] text-[10px] font-semibold">Kitchen & Cellar</span>
+        </div>
+        <h3 class="font-serif text-2xl font-bold text-burgundy mb-6">Add New Menu Dish</h3>
+        
+        <form method="POST" action="{{ url_for('add_menu_item') }}" class="space-y-4">
+            <div>
+                <label class="block text-xs uppercase tracking-wider text-neutral-700 font-semibold mb-1">Dish Name</label>
+                <input type="text" name="name" required placeholder="e.g. Pan-Seared Chilean Sea Bass" class="w-full bg-cream border border-neutral-300 p-3 rounded-sm text-sm focus:border-gold focus:outline-none">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-neutral-700 font-semibold mb-1">Category</label>
+                    <select name="category" required class="w-full bg-cream border border-neutral-300 p-3 rounded-sm text-sm focus:border-gold focus:outline-none">
+                        <option value="pasta">Pasta</option>
+                        <option value="mains" selected>Mains</option>
+                        <option value="salads">Salads</option>
+                        <option value="desserts">Desserts</option>
+                        <option value="beverages">Beverages</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-neutral-700 font-semibold mb-1">Price ($ USD)</label>
+                    <input type="number" step="0.01" name="price" required placeholder="38.00" class="w-full bg-cream border border-neutral-300 p-3 rounded-sm text-sm focus:border-gold focus:outline-none">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs uppercase tracking-wider text-neutral-700 font-semibold mb-1">Description / Ingredients</label>
+                <textarea name="description" rows="3" required placeholder="Sustainably caught sea bass, saffron emulsion, heirloom carrots..." class="w-full bg-cream border border-neutral-300 p-3 rounded-sm text-sm focus:border-gold focus:outline-none"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs uppercase tracking-wider text-neutral-700 font-semibold mb-1">Image URL (Unsplash or direct image)</label>
+                <input type="url" name="image_url" required placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" class="w-full bg-cream border border-neutral-300 p-3 rounded-sm text-sm focus:border-gold focus:outline-none">
+            </div>
+            <button type="submit" class="w-full bg-burgundy hover:bg-burgundyHover text-white py-3.5 text-xs uppercase tracking-widest font-medium rounded-sm shadow-md transition-all mt-4">Save & Publish Dish</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function openAddMenuModal() {
+        document.getElementById('add-menu-modal').classList.remove('hidden');
+    }
+    function closeAddMenuModal() {
+        document.getElementById('add-menu-modal').classList.add('hidden');
+    }
+</script>
+{% endblock %}

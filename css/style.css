@@ -1,0 +1,97 @@
+/* Lumière Fine Dining & Luxury Restaurant Styles */
+:root {
+    --cream: #F9F6F1;
+    --cream-light: #FDFBF7;
+    --burgundy: #4A1C2B;
+    --burgundy-dark: #35121E;
+    --burgundy-light: #612539;
+    --gold: #C9A227;
+    --gold-light: #E5C358;
+    --gold-dark: #A07F1A;
+    --dark: #1A1A1A;
+}
+
+body {
+    background-color: var(--cream);
+    color: #2D2D2D;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .font-serif {
+    font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* Luxury Selection Accent */
+::selection {
+    background-color: var(--gold);
+    color: #ffffff;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #F0ECE1;
+}
+::-webkit-scrollbar-thumb {
+    background: #C9A227;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #A07F1A;
+}
+
+/* Smooth Transitions */
+a, button {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Card Hover Lift */
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px -5px rgba(74, 28, 43, 0.15);
+}
+
+/* Elegant Image Shine */
+.img-zoom {
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.img-zoom:hover {
+    transform: scale(1.05);
+}
+
+/* Glassmorphism effects */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(201, 162, 39, 0.2);
+}
+
+/* Badge styling */
+.badge-gold {
+    background: linear-gradient(135deg, #C9A227 0%, #E5C358 100%);
+    color: #1A1A1A;
+    font-weight: 600;
+}
+
+/* Active Nav Link Underline */
+.nav-link.active {
+    color: var(--gold);
+    position: relative;
+}
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--gold);
+    border-radius: 2px;
+}
